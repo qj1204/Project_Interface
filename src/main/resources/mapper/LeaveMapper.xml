@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoxin.projectinterface.mapper.LeaveMapper">
+
+    <resultMap id="Leave-Student" type="com.xiaoxin.projectinterface.entity.Leave">
+        <id property="leaveId" column="leave_id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="leaveTime" column="leave_time"/>
+        <result property="backTime" column="back_time"/>
+        <result property="leaveReason" column="leave_reason"/>
+        <result property="approvalTime" column="approval_time"/>
+        <result property="approvalResult" column="approval_result"/>
+        <result property="approvalRemark" column="approval_remark"/>
+        <association property="student" javaType="com.xiaoxin.projectinterface.entity.Student" resultMap="studentMap"/>
+    </resultMap>
+
+    <resultMap id="studentMap" type="com.xiaoxin.projectinterface.entity.Student">
+        <id property="studentId" column="student_id"/>
+        <result property="studentAccount" column="student_account"/>
+        <result property="studentPassword" column="student_password"/>
+        <result property="studentName" column="student_name"/>
+        <result property="studentSex" column="student_sex"/>
+        <result property="studentAvatar" column="student_avatar"/>
+        <result property="studentClass" column="student_class"/>
+        <result property="studentFace" column="student_face"/>
+        <result property="studentPhone" column="student_phone"/>
+        <result property="studentEmail" column="student_email"/>
+    </resultMap>
+
+    <select id="findAllLeave" resultMap="Leave-Student">
+        SELECT *
+        FROM leave_attend l,student s
+        WHERE l.student_id = s.student_id
+        AND l.course_id = #{courseId}
+    </select>
+
+    <select id="findAllLeaveWithStudent" resultMap="Leave-Student">
+        SELECT *
+        FROM leave_attend l,student s
+        WHERE l.student_id = s.student_id
+    </select>
+
+    <select id="findLeavedStudent" resultType="com.xiaoxin.projectinterface.entity.Leave">
+        SELECT *
+        FROM leave_attend
+        WHERE approval_result=2 AND course_id=#{courseId} AND leave_time &lt;= #{startTime} AND back_time &gt;= #{endTime}
+        ORDER BY leave_time ASC
+    </select>
+</mapper>

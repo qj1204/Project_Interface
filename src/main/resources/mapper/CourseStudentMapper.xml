@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoxin.projectinterface.mapper.CourseStudentMapper">
+    <resultMap id="CourseStudent-Student" type="com.xiaoxin.projectinterface.entity.CourseStudent">
+        <id property="studentId" column="student_id"/>
+        <id property="courseId" column="course_id"/>
+        <result property="joinTime" column="join_time"/>
+        <association property="student" javaType="com.xiaoxin.projectinterface.entity.Student"
+                     resultMap="studentMap"/>
+    </resultMap>
+
+    <resultMap id="studentMap" type="com.xiaoxin.projectinterface.entity.Student">
+        <id property="studentId" column="student_id"/>
+        <result property="studentAccount" column="student_account"/>
+        <result property="studentPassword" column="student_password"/>
+        <result property="studentName" column="student_name"/>
+        <result property="studentSex" column="student_sex"/>
+        <result property="studentAvatar" column="student_avatar"/>
+        <result property="studentClass" column="student_class"/>
+        <result property="studentFace" column="student_face"/>
+        <result property="studentPhone" column="student_phone"/>
+        <result property="studentEmail" column="student_email"/>
+    </resultMap>
+
+    <select id="findAllStudentByCourseId" resultMap="CourseStudent-Student">
+        SELECT *
+        FROM student s,course_student cs
+        WHERE s.student_id = cs.student_id AND cs.course_id = #{courseId}
+        ORDER BY s.student_account ASC;
+    </select>
+</mapper>

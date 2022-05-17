@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoxin.projectinterface.mapper.AttendMapper">
+
+    <select id="findNeedLeaveAttend" resultType="com.xiaoxin.projectinterface.entity.Attend">
+        SELECT *
+        FROM attend
+        WHERE attend_start &gt; #{leaveTime} and attend_end &lt; #{backTime} and course_id=#{courseId}
+        ORDER by attend_start DESC
+    </select>
+
+    <select id="findAttendByTime" resultType="com.xiaoxin.projectinterface.entity.Attend">
+        SELECT *
+        FROM attend
+        WHERE course_id=#{courseId} and DATE_FORMAT(attend_start,'%Y-%m-%d %H:%i:%s') LIKE '%' #{time} '%'
+    </select>
+
+    <select id="findStudentAttend" resultType="com.xiaoxin.projectinterface.entity.Attend">
+        SELECT *
+        FROM attend
+        WHERE attend_start &gt; #{joinTime} and course_id=#{courseId}
+        ORDER by attend_start DESC
+    </select>
+
+    <select id="findStudentAttendByTime" resultType="com.xiaoxin.projectinterface.entity.Attend">
+        SELECT *
+        FROM attend
+        WHERE attend_start &gt; #{joinTime} and course_id=#{courseId} and DATE_FORMAT(attend_start,'%Y-%m-%d %H:%i:%s') LIKE '%' #{time} '%'
+        ORDER by attend_start DESC
+    </select>
+</mapper>

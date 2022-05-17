@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoxin.projectinterface.mapper.CourseMapper">
+
+    <resultMap id="UnionTableQuery" type="com.xiaoxin.projectinterface.entity.Course">
+        <id property="courseId" column="course_id"/>
+        <result property="teacherId" column="teacher_id"/>
+        <result property="courseAvatar" column="course_avatar"/>
+        <result property="courseIntroduce" column="course_introduce"/>
+        <result property="courseCode" column="course_code"/>
+        <result property="courseName" column="course_name"/>
+        <association property="teacher" javaType="com.xiaoxin.projectinterface.entity.Teacher" resultMap="teacherMap"/>
+    </resultMap>
+
+    <resultMap id="teacherMap" type="com.xiaoxin.projectinterface.entity.Teacher">
+        <id property="teacherId" column="teacher_id"/>
+        <result property="teacherAccount" column="teacher_account"/>
+        <result property="teacherPassword" column="teacher_password"/>
+        <result property="teacherName" column="teacher_name"/>
+        <result property="teacherSex" column="teacher_sex"/>
+        <result property="teacherPhone" column="teacher_phone"/>
+        <result property="teacherEmail" column="teacher_email"/>
+        <result property="teacherAvatar" column="teacher_avatar"/>
+    </resultMap>
+
+    <select id="findCourseByCode" resultMap="UnionTableQuery">
+        SELECT *
+        FROM course c,teacher t
+        WHERE c.teacher_id = t.teacher_id and c.course_code=#{code}
+    </select>
+
+    <select id="findCourseByTeacherId" resultMap="UnionTableQuery">
+        SELECT *
+        FROM course c,teacher t
+        WHERE c.teacher_id = t.teacher_id and c.teacher_id=#{teacherId}
+    </select>
+
+    <select id="findCourseByTeacherIdAndName" resultMap="UnionTableQuery">
+        SELECT *
+        FROM course c,teacher t
+        WHERE c.teacher_id = t.teacher_id
+        and c.teacher_id=#{teacherId}
+        and course_name like '%' #{name} '%'
+    </select>
+
+    <select id="findAllCourse" resultMap="UnionTableQuery">
+        SELECT *
+        FROM course c,teacher t
+        WHERE c.teacher_id = t.teacher_id
+    </select>
+</mapper>
